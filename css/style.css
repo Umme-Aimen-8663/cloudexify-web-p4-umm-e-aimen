@@ -1,0 +1,341 @@
+/* =========================================================================
+   Desi Dine — style.css
+   Design tokens:
+   --dd-green   #14532d  (deep forest green, primary)
+   --dd-green-2 #0c3d20  (darker green for hovers/nav)
+   --dd-gold    #c8963e  (warm gold/amber accent)
+   --dd-gold-l  #e9c37a  (light gold, highlights)
+   --dd-cream   #faf6ee  (warm cream background)
+   --dd-ink     #2b2118  (near-black warm ink for text)
+   ========================================================================= */
+
+:root {
+  --dd-green: #14532d;
+  --dd-green-2: #0c3d20;
+  --dd-gold: #c8963e;
+  --dd-gold-l: #e9c37a;
+  --dd-cream: #faf6ee;
+  --dd-ink: #2b2118;
+  --dd-radius: 14px;
+  --surface: #ffffff;
+  --surface-soft: #f8f9fa;
+  --card-border: #e9dfc9;
+  --muted: #6c757d;
+  --shadow: rgba(20, 83, 45, 0.12);
+}
+
+:root[data-theme="dark"] {
+  --dd-green: #1d7a4f;
+  --dd-green-2: #0e2e1d;
+  --dd-gold: #f3c76d;
+  --dd-gold-l: #f8d998;
+  --dd-cream: #101722;
+  --dd-ink: #edf2f7;
+  --surface: #18212d;
+  --surface-soft: #1d2a38;
+  --card-border: #2d3b4d;
+  --muted: #b4c0cc;
+  --shadow: rgba(5, 12, 18, 0.38);
+}
+
+body {
+  background-color: var(--dd-cream);
+  color: var(--dd-ink);
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+h1, h2, h3, h4, h5, .brand-font {
+  font-family: "Georgia", "Times New Roman", serif;
+  letter-spacing: 0.3px;
+}
+
+/* ---------------------------------------------------------------------
+   Navbar
+--------------------------------------------------------------------- */
+.navbar-dd {
+  background-color: var(--dd-green);
+  border-bottom: 3px solid var(--dd-gold);
+}
+
+.navbar-dd .navbar-brand {
+  color: var(--dd-gold-l) !important;
+  font-family: "Georgia", serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.navbar-dd .nav-link {
+  color: #f1e8d6 !important;
+}
+
+.navbar-dd .nav-link:hover,
+.navbar-dd .nav-link.active {
+  color: var(--dd-gold-l) !important;
+}
+
+/* ---------------------------------------------------------------------
+   Hero
+--------------------------------------------------------------------- */
+.hero-section {
+  background: linear-gradient(135deg, var(--dd-green) 0%, var(--dd-green-2) 100%);
+  color: #fff;
+  padding: 5rem 0 4rem;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 4px solid var(--dd-gold);
+}
+
+.hero-section::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle at 85% 20%, rgba(200, 150, 62, 0.25), transparent 45%);
+}
+
+.hero-section .display-4,
+.hero-section h1 {
+  font-family: "Georgia", serif;
+  color: #fff;
+}
+
+.hero-accent {
+  color: var(--dd-gold-l);
+}
+
+.hero-subtitle {
+  color: #e6ddc8;
+  max-width: 600px;
+}
+
+.btn-dd-primary {
+  background-color: var(--dd-gold);
+  border-color: var(--dd-gold);
+  color: var(--dd-ink);
+  font-weight: 600;
+}
+
+.btn-dd-primary:hover {
+  background-color: var(--dd-gold-l);
+  border-color: var(--dd-gold-l);
+  color: var(--dd-ink);
+}
+
+.btn-dd-outline {
+  border: 2px solid var(--dd-gold-l);
+  color: var(--dd-gold-l);
+  background: transparent;
+  font-weight: 600;
+}
+
+.btn-dd-outline:hover {
+  background: var(--dd-gold-l);
+  color: var(--dd-green-2);
+}
+
+/* ---------------------------------------------------------------------
+   Category filters
+--------------------------------------------------------------------- */
+.category-filter-btn {
+  border: 2px solid var(--dd-green);
+  color: var(--dd-green);
+  background: #fff;
+  border-radius: 999px;
+  padding: 0.4rem 1.1rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.15s ease-in-out;
+}
+
+.category-filter-btn.active,
+.category-filter-btn:hover {
+  background: var(--dd-green);
+  color: #fff;
+}
+
+/* ---------------------------------------------------------------------
+   Menu cards
+--------------------------------------------------------------------- */
+.menu-card {
+  border: 1px solid var(--card-border);
+  border-radius: var(--dd-radius);
+  overflow: hidden;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  background: var(--surface);
+}
+
+.menu-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(20, 83, 45, 0.15);
+}
+
+.menu-card-img {
+  height: 170px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.menu-category-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: var(--dd-gold);
+  color: var(--dd-ink);
+  font-weight: 600;
+}
+
+.menu-price {
+  color: var(--dd-green);
+  font-size: 1.05rem;
+}
+
+/* ---------------------------------------------------------------------
+   Cart offcanvas
+--------------------------------------------------------------------- */
+.offcanvas-header {
+  background-color: var(--dd-green);
+  color: #fff;
+}
+
+.offcanvas-header .btn-close {
+  filter: invert(1);
+}
+
+#cartBadge {
+  background-color: var(--dd-gold);
+  color: var(--dd-ink);
+  font-size: 0.7rem;
+}
+
+/* ---------------------------------------------------------------------
+   Order cards
+--------------------------------------------------------------------- */
+.order-card {
+  border: 1px solid var(--card-border);
+  border-radius: var(--dd-radius);
+  background: var(--surface);
+}
+
+/* ---------------------------------------------------------------------
+   Auth pages
+--------------------------------------------------------------------- */
+.auth-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--dd-green) 0%, var(--dd-green-2) 100%);
+  padding: 2rem 1rem;
+}
+
+.auth-card {
+  background: var(--surface);
+  border-radius: var(--dd-radius);
+  padding: 2.5rem;
+  max-width: 440px;
+  width: 100%;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+  border-top: 5px solid var(--dd-gold);
+}
+
+.auth-card h2 {
+  color: var(--dd-green);
+}
+
+/* ---------------------------------------------------------------------
+   Admin dashboard
+--------------------------------------------------------------------- */
+.admin-sidebar {
+  background-color: var(--dd-green-2);
+  min-height: 100vh;
+  color: #f1e8d6;
+}
+
+.admin-sidebar .nav-link {
+  color: #d8cdb4;
+  border-radius: 8px;
+}
+
+.admin-sidebar .nav-link.active,
+.admin-sidebar .nav-link:hover {
+  background-color: var(--dd-green);
+  color: #fff;
+}
+
+.stat-card {
+  border: none;
+  border-radius: var(--dd-radius);
+  border-left: 5px solid var(--dd-gold);
+  background: var(--surface);
+  box-shadow: 0 4px 14px var(--shadow);
+}
+
+.stat-card .stat-label {
+  color: #8a7a5c;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-card .stat-value {
+  color: var(--dd-green);
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.admin-menu-thumb {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* ---------------------------------------------------------------------
+   Footer
+--------------------------------------------------------------------- */
+.footer-dd {
+  background-color: var(--dd-green-2);
+  color: #d8cdb4;
+  padding: 2rem 0;
+  border-top: 3px solid var(--dd-gold);
+}
+
+/* ---------------------------------------------------------------------
+   Utilities
+--------------------------------------------------------------------- */
+.text-dd-gold {
+  color: var(--dd-gold) !important;
+}
+
+.text-dd-green {
+  color: var(--dd-green) !important;
+}
+
+.profile-card,
+.settings-card {
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: var(--dd-radius);
+  box-shadow: 0 10px 24px var(--shadow);
+}
+
+body[data-theme="dark"] .table,
+body[data-theme="dark"] .card,
+body[data-theme="dark"] .modal-content,
+body[data-theme="dark"] .offcanvas,
+body[data-theme="dark"] .form-control,
+body[data-theme="dark"] .form-select,
+body[data-theme="dark"] .input-group-text {
+  background-color: var(--surface) !important;
+  color: var(--dd-ink) !important;
+  border-color: var(--card-border) !important;
+}
+
+body[data-theme="dark"] .text-muted {
+  color: var(--muted) !important;
+}
+
+body[data-theme="dark"] .bg-white {
+  background-color: var(--surface) !important;
+}

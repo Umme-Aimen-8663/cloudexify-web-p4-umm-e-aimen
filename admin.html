@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard | Desi Dine</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="toast-container position-fixed top-0 end-0 p-3" id="toastContainer" style="z-index: 1080"></div>
+
+  <div class="container-fluid">
+    <div class="row">
+
+      <!-- SIDEBAR -->
+      <nav class="col-12 col-md-2 admin-sidebar p-3">
+        <a href="admin.html" class="d-flex align-items-center mb-4 text-decoration-none">
+          <i class="bi bi-egg-fried fs-4 text-dd-gold me-2"></i>
+          <span class="fs-5 fw-bold text-white brand-font">Desi Dine</span>
+        </a>
+        <ul class="nav nav-pills flex-column gap-1">
+          <li class="nav-item"><a class="nav-link active" href="#dashboard"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="#orders"><i class="bi bi-receipt me-2"></i>Orders</a></li>
+          <li class="nav-item"><a class="nav-link" href="#menu"><i class="bi bi-journal-text me-2"></i>Menu Management</a></li>
+        </ul>
+        <hr class="text-secondary">
+        <a href="index.html" class="nav-link"><i class="bi bi-arrow-left-circle me-2"></i>Back to Site</a>
+        <button class="nav-link btn btn-link text-start w-100 p-0" onclick="logoutUser()"><i class="bi bi-box-arrow-right me-2"></i>Logout</button>
+      </nav>
+
+      <!-- MAIN CONTENT -->
+      <main class="col-12 col-md-10 p-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h2 class="text-dd-green mb-0" id="dashboard">Admin Dashboard</h2>
+          <span class="badge bg-success-subtle text-success border border-success-subtle">
+            <i class="bi bi-arrow-repeat"></i> Auto-refreshing every 30s
+          </span>
+        </div>
+
+        <!-- STAT CARDS -->
+        <div class="row g-3 mb-5">
+          <div class="col-sm-6 col-lg-3">
+            <div class="card stat-card p-3">
+              <div class="stat-label">Total Orders Today</div>
+              <div class="stat-value" id="statTotalOrders">—</div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-3">
+            <div class="card stat-card p-3">
+              <div class="stat-label">Revenue Today</div>
+              <div class="stat-value" id="statRevenue">—</div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-3">
+            <div class="card stat-card p-3">
+              <div class="stat-label">Pending Orders</div>
+              <div class="stat-value" id="statPending">—</div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-3">
+            <div class="card stat-card p-3">
+              <div class="stat-label">Total Menu Items</div>
+              <div class="stat-value" id="statMenuItems">—</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ORDERS TABLE -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h4 class="text-dd-green mb-0" id="orders">Orders</h4>
+          <button class="btn btn-sm btn-outline-secondary" onclick="loadAdminOrders(); loadAdminStats();">
+            <i class="bi bi-arrow-clockwise"></i> Refresh
+          </button>
+        </div>
+        <div class="table-responsive mb-5">
+          <table class="table table-hover align-middle bg-white rounded shadow-sm">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Items</th>
+                <th>Total</th>
+                <th>Time</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="ordersTableBody">
+              <tr><td colspan="6" class="text-center py-4">
+                <div class="spinner-border" style="color:var(--dd-green)"></div>
+              </td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- MENU MANAGEMENT -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h4 class="text-dd-green mb-0" id="menu">Menu Management</h4>
+          <button class="btn btn-dd-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addItemModal">
+            <i class="bi bi-plus-lg"></i> Add New Item
+          </button>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle bg-white rounded shadow-sm">
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Available</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="menuTableBody">
+              <tr><td colspan="6" class="text-center py-4">
+                <div class="spinner-border" style="color:var(--dd-green)"></div>
+              </td></tr>
+            </tbody>
+          </table>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- ADD ITEM MODAL -->
+  <div class="modal fade" id="addItemModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form id="addItemForm">
+          <div class="modal-header">
+            <h5 class="modal-title">Add Menu Item</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label class="form-label">Name</label>
+              <input type="text" class="form-control" id="addItemName" required placeholder="e.g. Chicken Biryani">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Description</label>
+              <textarea class="form-control" id="addItemDescription" rows="2" placeholder="Fragrant basmati rice with spiced chicken..."></textarea>
+            </div>
+            <div class="row">
+              <div class="col-6 mb-3">
+                <label class="form-label">Price (PKR)</label>
+                <input type="number" class="form-control" id="addItemPrice" required min="0" step="1" placeholder="650">
+              </div>
+              <div class="col-6 mb-3">
+                <label class="form-label">Category</label>
+                <select class="form-select" id="addItemCategory" required>
+                  <option value="Pakistani">Pakistani</option>
+                  <option value="Chinese Specials">Chinese Specials</option>
+                  <option value="Italian Specials">Italian Specials</option>
+                  <option value="Fast Food">Fast Food</option>
+                  <option value="Desserts & Drinks">Desserts & Drinks</option>
+                </select>
+              </div>
+            </div>
+            <div class="mb-1">
+              <label class="form-label">Image URL</label>
+              <input type="url" class="form-control" id="addItemImage" placeholder="https://images.unsplash.com/...">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-dd-primary" id="addItemSubmitBtn">Add Item</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- EDIT ITEM MODAL -->
+  <div class="modal fade" id="editItemModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form id="editItemForm">
+          <div class="modal-header">
+            <h5 class="modal-title">Edit Menu Item</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="editItemId">
+            <div class="mb-3">
+              <label class="form-label">Name</label>
+              <input type="text" class="form-control" id="editItemName" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Description</label>
+              <textarea class="form-control" id="editItemDescription" rows="2"></textarea>
+            </div>
+            <div class="row">
+              <div class="col-6 mb-3">
+                <label class="form-label">Price (PKR)</label>
+                <input type="number" class="form-control" id="editItemPrice" required min="0" step="1">
+              </div>
+              <div class="col-6 mb-3">
+                <label class="form-label">Category</label>
+                <select class="form-select" id="editItemCategory" required>
+                  <option value="Pakistani">Pakistani</option>
+                  <option value="Chinese Specials">Chinese Specials</option>
+                  <option value="Italian Specials">Italian Specials</option>
+                  <option value="Fast Food">Fast Food</option>
+                  <option value="Desserts & Drinks">Desserts & Drinks</option>
+                </select>
+              </div>
+            </div>
+            <div class="mb-1">
+              <label class="form-label">Image URL</label>
+              <input type="url" class="form-control" id="editItemImage">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-dd-primary" id="editItemSubmitBtn">Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/admin.js"></script>
+  <script>
+    (async () => {
+      const authResult = await requireAdmin();
+      if (!authResult) return;
+
+      const profile = authResult.profile || (await getProfile(authResult.user.id));
+      if (profile && profile.role !== "admin") {
+        showToast("Admin access required.", "error");
+        setTimeout(() => (window.location.href = "index.html"), 700);
+        return;
+      }
+
+      await Promise.all([loadAdminStats(), loadAdminOrders(), loadAdminMenu()]);
+      startAdminAutoRefresh();
+    })();
+
+    document.getElementById("addItemForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById("addItemSubmitBtn");
+      btn.disabled = true;
+      btn.innerHTML = `<span class="spinner-border spinner-border-sm"></span>`;
+
+      const ok = await addMenuItem({
+        name: document.getElementById("addItemName").value.trim(),
+        description: document.getElementById("addItemDescription").value.trim(),
+        price: parseFloat(document.getElementById("addItemPrice").value),
+        category: document.getElementById("addItemCategory").value,
+        image_url: document.getElementById("addItemImage").value.trim(),
+      });
+
+      btn.disabled = false;
+      btn.innerHTML = "Add Item";
+
+      if (ok) {
+        e.target.reset();
+        bootstrap.Modal.getInstance(document.getElementById("addItemModal")).hide();
+      }
+    });
+
+    document.getElementById("editItemForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById("editItemSubmitBtn");
+      btn.disabled = true;
+      btn.innerHTML = `<span class="spinner-border spinner-border-sm"></span>`;
+
+      const ok = await saveMenuItemEdit({
+        id: document.getElementById("editItemId").value,
+        name: document.getElementById("editItemName").value.trim(),
+        description: document.getElementById("editItemDescription").value.trim(),
+        price: parseFloat(document.getElementById("editItemPrice").value),
+        category: document.getElementById("editItemCategory").value,
+        image_url: document.getElementById("editItemImage").value.trim(),
+      });
+
+      btn.disabled = false;
+      btn.innerHTML = "Save Changes";
+
+      if (ok) {
+        bootstrap.Modal.getInstance(document.getElementById("editItemModal")).hide();
+      }
+    });
+  </script>
+</body>
+</html>
