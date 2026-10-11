@@ -2,13 +2,20 @@
  * supabase.js
  * -----------------------------------------------------------------------
  * Central Supabase client initialization for Desi Dine.
- * Replace SUPABASE_URL and SUPABASE_ANON_KEY with your own project values
- * (Supabase Dashboard -> Project Settings -> API).
+ * Reads SUPABASE_URL and SUPABASE_ANON_KEY from a local `js/config.js`
+ * file that defines `window.APP_CONFIG`.
  * -----------------------------------------------------------------------
  */
 
-const SUPABASE_URL = "https://msafjhgyoeflzgximktb.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_vZbiLlHa0b500HDiMkMtAQ_14Yxa2o_";
+const appConfig = window.APP_CONFIG || {};
+const SUPABASE_URL = appConfig.SUPABASE_URL;
+const SUPABASE_ANON_KEY = appConfig.SUPABASE_ANON_KEY;
+
+if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+  throw new Error(
+    "Missing Supabase config. Create js/config.js (gitignored) with window.APP_CONFIG.SUPABASE_URL and window.APP_CONFIG.SUPABASE_ANON_KEY."
+  );
+}
 
 // The Supabase CDN script (loaded in every HTML page) exposes `supabase.createClient`
 // as a global `supabase` object. We create our client and store it as `db`

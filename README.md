@@ -50,6 +50,8 @@ This project includes a customer-facing ordering panel and a secure admin dashbo
 
 ## 📁 File Structure
 restaurant-app/
+├── .env.example
+├── .gitignore
 ├── index.html          # Customer panel
 ├── admin.html          # Admin dashboard
 ├── login.html
@@ -57,6 +59,7 @@ restaurant-app/
 ├── css/
 │   └── style.css
 ├── js/
+│   ├── config.js       # Local runtime config (gitignored, create manually)
 │   ├── supabase.js
 │   ├── auth.js
 │   ├── menu.js
@@ -76,7 +79,45 @@ restaurant-app/
 
 1. Clone the repository
 2. Open the folder in VS Code
-3. Use Live Server to open `login.html` or `register.html`
+3. Copy `.env.example` values into your own local values:
+   - `SUPABASE_URL`
+   - `SUPABASE_ANON_KEY`
+4. Create `js/config.js` (this file is gitignored) with:
+
+```js
+window.APP_CONFIG = {
+  SUPABASE_URL: "https://your-project-ref.supabase.co",
+  SUPABASE_ANON_KEY: "sb_publishable_your_public_anon_key",
+};
+```
+
+5. Use Live Server to open `login.html` or `register.html`
+
+---
+
+## ▲ Vercel Deployment Configuration (Static App)
+
+Because this project is plain static HTML/JS (no bundler), browser code does not get `process.env` automatically.
+
+1. In Vercel Project Settings → Environment Variables, add:
+   - `SUPABASE_URL`
+   - `SUPABASE_ANON_KEY`
+2. In Vercel Build & Output settings, set a Build Command that writes `js/config.js` from those variables, for example:
+
+```bash
+printf "window.APP_CONFIG = { SUPABASE_URL: '%s', SUPABASE_ANON_KEY: '%s' };\n" "$SUPABASE_URL" "$SUPABASE_ANON_KEY" > js/config.js
+```
+
+3. Keep `js/config.js` out of git (already ignored in `.gitignore`).
+
+---
+
+## 🔒 Security Notes
+
+- Supabase **anon/publishable** keys are designed for browser/client usage.
+- Supabase **service-role** keys are highly privileged and must never be exposed in frontend code or committed files.
+- Frontend environment values are not secret once delivered to the browser.
+- If any real credentials were previously committed, review and rotate them in the provider dashboard.
 
 ---
 
